@@ -30,12 +30,36 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-11-23 18:20:15.659101",
+ "modified": "2026-10-17 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "Transport Management",
  "name": "Driver Documents",
  "owner": "Administrator",
- "permissions": [],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Fleet Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
  "sort_field": "modified",
  "sort_order": "DESC"
 }

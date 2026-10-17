@@ -52,7 +52,7 @@
   "issingle": 0,
   "istable": 0,
   "max_attachments": 0,
-  "modified": "2019-07-25 15:33:20.688701",
+  "modified": "2026-10-17 18:00:00.000000",
   "modified_by": "Administrator",
   "module": "Transport Management",
   "name": "Vehicle Routine Checklist",
@@ -78,6 +78,17 @@
       "share": 1,
       "submit": 0,
       "write": 1
+    },
+    {
+      "role": "Fleet Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "report": 1,
+      "export": 1,
+      "print": 1,
+      "email": 1,
+      "share": 1
     }
   ],
   "quick_entry": 1,
