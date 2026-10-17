@@ -289,7 +289,7 @@ cur_frm.cscript.recommend_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -311,7 +311,7 @@ cur_frm.cscript.recommend_against_request = function (frm) {
 			function () {
 				$.each(selected['requested_funds'], function (index, value) {
 					frappe.call({
-						method: "erpnext.accounts.doctype.requested_payments.requested_payments.recommend_against_request",
+						method: "trans_ms.transport_management.doctype.requested_payments.requested_payments.recommend_against_request",
 						freeze: true,
 						args: {
 							request_doctype: "Requested Funds Details",
@@ -323,7 +323,7 @@ cur_frm.cscript.recommend_against_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -357,7 +357,7 @@ cur_frm.cscript.approve_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -391,7 +391,7 @@ cur_frm.cscript.reject_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -471,7 +471,7 @@ cur_frm.cscript.accounts_cancel = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -654,7 +654,7 @@ cur_frm.cscript.approve_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
@@ -687,7 +687,7 @@ cur_frm.cscript.reject_request = function (frm) {
 						}
 					});
 				});
-				location.reload();
+				frappe.after_ajax(() => location.reload());  // wait for the calls above, or the reload cancels them
 			},
 			function () {
 				//Do nothing
