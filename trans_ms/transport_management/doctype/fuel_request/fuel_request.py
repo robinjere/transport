@@ -11,6 +11,7 @@ from frappe import _, msgprint
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import nowdate
 from trans_ms.utlis.dimension import set_dimension
+from trans_ms.utlis import guard
 
 
 class FuelRequest(Document):
@@ -182,63 +183,47 @@ class FuelRequest(Document):
         if hasattr(self, "__setup__"):
             self.__setup__()
 
-@frappe.whitelist(allow_guest=True)
 def set_status(doc):
+    """Fuel Request status from its trip's fuel rows; `doc` is one Fuel Request Table row."""
     parent_doc_name = frappe.db.get_value("Fuel Request Table", doc, "parent")
-    fuel_requests = frappe.db.sql(
-        """SELECT name, status FROM `tabFuel Request Table` WHERE parent = %(parent_name)s""",
-        {"parent_name": parent_doc_name},
-        as_dict=1,
+    statuses = frappe.get_all(
+        "Fuel Request Table", filters={"parent": parent_doc_name}, pluck="status"
     )
-
-    processed_requests = 0
-    status = "Fully Processed"
-
-    for request in fuel_requests:
-        if request.status not in ["Approved", "Rejected"]:
-            status = "Partially Processed"
-        else:
-            processed_requests = processed_requests + 1
-
+    processed = [s for s in statuses if s in ("Approved", "Rejected")]
     parent_request_name = frappe.db.get_value(
         "Fuel Request", {"reference_docname": parent_doc_name}
     )
-    parent_request_doc = frappe.get_doc("Fuel Request", parent_request_name)
-    if 0 == processed_requests:
-        parent_request_doc.db_set("status", "Waiting Approval")
+    if not parent_request_name:
+        return
+    if not processed:
+        status = "Waiting Approval"
+    elif len(processed) == len(statuses):
+        status = "Fully Processed"
     else:
-        parent_request_doc.db_set("status", status)
+        status = "Partially Processed"
+    frappe.db.set_value("Fuel Request", parent_request_name, "status", status)
 
 
-@frappe.whitelist(allow_guest=True)
-def approve_request(**args):
-    args = frappe._dict(args)
-
-    # Timestamp
-    ts = time.time()
-    timestamp = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
-
-    doc = frappe.get_doc("Fuel Request Table", args.request_docname)
-    doc.db_set("status", "Approved")
-    doc.db_set("approved_by", args.user)
-    doc.db_set("approved_date", timestamp)
-    # set_status(args.request_docname)
-    return "Request Updated"
+@frappe.whitelist()
+def approve_request(request_docname, **args):
+    return decide(request_docname, "Approved")
 
 
-@frappe.whitelist(allow_guest=True)
-def reject_request(**args):
-    args = frappe._dict(args)
+@frappe.whitelist()
+def reject_request(request_docname, **args):
+    return decide(request_docname, "Rejected")
 
-    # Timestamp
-    ts = time.time()
-    timestamp = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
 
-    doc = frappe.get_doc("Fuel Request Table", args.request_docname)
-    doc.db_set("status", "Rejected")
-    doc.db_set("approved_by", args.user)
-    doc.db_set("approved_date", timestamp)
-    # set_status(args.request_docname)
+def decide(request_docname, status):
+    request, trip = guard.row("Fuel Request Table", request_docname)
+    if request.status != "Requested":
+        frappe.throw(_("Fuel request {0} is already {1}.").format(request.name, request.status))
+    if trip.owner == frappe.session.user:
+        frappe.throw(_("You cannot approve or reject fuel for a trip you created."))
+    request.db_set(
+        {"status": status, "approved_by": guard.me(), "approved_date": nowdate()}
+    )
+    set_status(request.name)
     return "Request Updated"
 
 
@@ -307,6 +292,7 @@ def reject_request(**args):
 
 @frappe.whitelist()
 def make_stock_entry(source_name, target_doc=None):
+    guard.doc("Fuel Request", source_name, "read")
     doc = get_mapped_doc(
         "Fuel Request",
         source_name,

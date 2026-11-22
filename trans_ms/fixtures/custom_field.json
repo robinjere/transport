@@ -219,5 +219,26 @@
     "options": "Vehicle Documents",
     "doctype": "Custom Field",
     "__last_sync_on": "2023-02-15T08:00:18.902Z"
+  },
+  {
+    "name": "Driver-trans_ms_documents_section",
+    "modified": "2026-10-17 18:00:00",
+    "dt": "Driver",
+    "label": "Documents",
+    "fieldname": "trans_ms_documents_section",
+    "insert_after": "driving_license_category",
+    "fieldtype": "Section Break",
+    "doctype": "Custom Field"
+  },
+  {
+    "name": "Driver-trans_ms_driver_documents",
+    "modified": "2026-10-17 18:00:00",
+    "dt": "Driver",
+    "label": "Driver Documents",
+    "fieldname": "trans_ms_driver_documents",
+    "insert_after": "trans_ms_documents_section",
+    "fieldtype": "Table",
+    "options": "Driver Document Attachment",
+    "doctype": "Custom Field"
   }
 ]

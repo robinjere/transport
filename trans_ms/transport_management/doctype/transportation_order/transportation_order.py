@@ -11,6 +11,7 @@ from frappe import _
 import json
 from frappe.utils import nowdate
 from trans_ms.utlis.dimension import set_dimension
+from trans_ms.utlis import guard
 from frappe.model.naming import make_autoname
 
 class TransportationOrder(Document):
@@ -199,7 +200,6 @@ class TransportationOrder(Document):
             self.__setup__()
 
 
-@frappe.whitelist(allow_guest=True)
 def transport_order_scheduler():
     # Create requests for imports less than 10 days to eta
     for row in frappe.db.sql(
@@ -213,7 +213,6 @@ def transport_order_scheduler():
         )
 
 
-@frappe.whitelist(allow_guest=True)
 def create_transport_order(**args):
     args = frappe._dict(args)
 
@@ -250,7 +249,6 @@ def create_transport_order(**args):
         return existing_transport_order
 
 
-@frappe.whitelist(allow_guest=True)
 def assign_vehicle(**args):
     args = frappe._dict(args)
 
@@ -322,8 +320,10 @@ def assign_vehicle(**args):
 
 @frappe.whitelist()
 def create_sales_invoice(doc, rows):
-    doc = frappe.get_doc(json.loads(doc))
-    rows = json.loads(rows)
+    doc = guard.doc("Transportation Order", guard.name_of(doc))
+    wanted = {guard.name_of(r) for r in frappe.parse_json(rows)}
+    # rates and items come from the saved order, not from the browser
+    rows = [r.as_dict() for r in doc.assign_transport if r.name in wanted and not r.invoice]
     if not rows:
         return
     items = []
@@ -376,12 +376,11 @@ def create_sales_invoice(doc, rows):
     for i in item_row_per:
         set_dimension(doc, invoice, src_child=i[0], tr_child=i[1])
 
-    frappe.flags.ignore_account_permission = True
     invoice.set_taxes()
     invoice.set_missing_values()
     invoice.flags.ignore_mandatory = True
     invoice.calculate_taxes_and_totals()
-    invoice.insert(ignore_permissions=True)
+    invoice.insert()
     for item in doc.assign_transport:
         if item.name in [i["name"] for i in rows]:
             item.invoice = invoice.name

@@ -60,7 +60,7 @@
   }
  ],
  "links": [],
- "modified": "2021-12-13 16:57:33.128523",
+ "modified": "2026-10-17 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "Transport Management",
  "name": "Trip Location Type",
@@ -77,6 +77,29 @@
    "role": "Clearing Agent",
    "share": 1,
    "write": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Fleet Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
   }
  ],
  "sort_field": "modified",

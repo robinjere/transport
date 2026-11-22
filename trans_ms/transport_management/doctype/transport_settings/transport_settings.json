@@ -72,7 +72,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-02-22 00:29:15.407565",
+ "modified": "2026-10-17 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "Transport Management",
  "name": "Transport Settings",
@@ -87,6 +87,12 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "role": "Fleet Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1
   }
  ],
  "sort_field": "modified",

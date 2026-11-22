@@ -22,7 +22,8 @@
         "section_trailer_documents",
         "trailer_documents"
     ],
-    "fields": [{
+    "fields": [
+        {
             "fieldname": "number_plate",
             "fieldtype": "Data",
             "in_list_view": 1,
@@ -94,24 +95,49 @@
         }
     ],
     "links": [],
-    "modified": "2022-11-28 11:57:08.540071",
+    "modified": "2026-10-17 18:00:00.000000",
     "modified_by": "Administrator",
     "module": "Transport Management",
     "name": "Trailer",
     "name_case": "UPPER CASE",
     "owner": "Administrator",
-    "permissions": [{
-        "create": 1,
-        "delete": 1,
-        "email": 1,
-        "export": 1,
-        "print": 1,
-        "read": 1,
-        "report": 1,
-        "role": "Clearing Agent",
-        "share": 1,
-        "write": 1
-    }],
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Clearing Agent",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1,
+            "report": 1,
+            "export": 1,
+            "print": 1,
+            "email": 1,
+            "share": 1
+        },
+        {
+            "role": "Fleet Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "report": 1,
+            "export": 1,
+            "print": 1,
+            "email": 1,
+            "share": 1
+        }
+    ],
     "search_fields": "number_plate, chassis_number, make",
     "show_name_in_global_search": 1,
     "sort_field": "modified",

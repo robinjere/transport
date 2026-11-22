@@ -310,7 +310,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-30 16:24:09.881670",
+ "modified": "2026-10-17 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "Transport Management",
  "name": "Transportation Order",
@@ -327,6 +327,24 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "role": "Fleet Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
   }
  ],
  "sort_field": "modified",

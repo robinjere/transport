@@ -26,6 +26,7 @@ class VehicleLog(Document):
 @frappe.whitelist()
 def get_make_model(license_plate):
 	vehicle=frappe.get_doc("Vehicle",license_plate)
+	vehicle.check_permission("read")
 	return (vehicle.make,vehicle.model)
 
 @frappe.whitelist()
@@ -43,6 +44,7 @@ def make_expense_claim(docname):
 		return total_exp_amt
 		
 	vehicle_log = frappe.get_doc("Vehicle Log", docname)
+	vehicle_log.check_permission("read")
 	exp_claim = frappe.new_doc("Expense Claim")
 	exp_claim.employee=vehicle_log.employee
 	exp_claim.vehicle_log=vehicle_log.name

@@ -878,18 +878,6 @@ frappe.ui.form.on('Vehicle Trip', {
         var offloaded = false;
         first_reload = false;
         //If return trip has been cancelled
-        if (return_cancelled) {
-            frappe.call({
-                method: 'fleet_management.fleet_management.doctype.transport_assignment.transport_assignment.change_assignment_status',
-                args: {
-                    assignment_docname: return_cancelled
-                },
-                freeze: true,
-                callback: function (data) {
-                    console.log('Assignemnt Cancelled');
-                }
-            });
-        }
 
         //Check if main trip offloaded
         if (frm.doc.main_route_steps && frm.doc.main_route_steps.length > 0) {
@@ -910,19 +898,6 @@ frappe.ui.form.on('Vehicle Trip', {
 
         if (to_save) {
             //Update vehicle status if is not subcontractor vehicle
-            if (['Sub-Contractor', 'Self Drive'].indexOf(frm.doc.transporter_type) == -1) {
-                frappe.call({
-                    method: 'fleet_management.fleet_management.doctype.vehicle.vehicle.change_status',
-                    args: {
-                        'vehicle': cur_frm.doc.vehicle,
-                        'status': vehicle_status,
-                        'hiden_status': vehicle_hidden_status
-                    },
-                    callback: function (data) {
-                        console.log(data.message);
-                    }
-                });
-            }
 
             //Save document
             frappe.after_ajax(function () {
@@ -1028,7 +1003,7 @@ frappe.ui.form.on('Vehicle Trip', {
     //Product Inspection function
     make_vehicle_inspection: function () {
         frappe.model.open_mapped_doc({
-            method: "fleet_management.fleet_management.doctype.vehicle_trip.vehicle_trip.make_vehicle_inspection",
+            method: "trans_ms.transport_management.doctype.vehicle_trip.vehicle_trip.make_vehicle_inspection",
             frm: cur_frm
         });
 
